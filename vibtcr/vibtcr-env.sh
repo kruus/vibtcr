@@ -6,13 +6,17 @@
 #   Initialize a "vibtcr" conda environment
 # Prerequisites: 
 #   1. Install conda/mamba  (installing mamba highly recommended)
-#   2. Login with conda activated (so we can grab CONDA exported variables)
-#   3. cd into the top-level 'vibtcr' directory, containing this shell script
-#
-# With mamba, a fresh RE-install with
-#      conda env remove -n vibtcr
-#      ./vibtcr-env.sh
-# will probably take about 1 minute.
+#   2. Login with conda activated AND in 'base' environment.
+#            (We want to grab some of your CONDA exported variables.)
+#   3. cd into the 'vibtcr/vibtcr' directory, containing this shell script
+# Running notebooks:
+#   4. `jupyter-lab` with py(or `conda activate vibtcr` for manual scripts)
+#   5. update this script if important packages are still missing.
+# Testing:
+#    With mamba, a fresh RE-install with
+#       conda env remove -n vibtcr
+#       ./vibtcr-env.sh
+#    will probably take about 1 minute.
 
 # Does conda look OK?
 if which conda; then echo "GOOD: conda is found"; else echo "OHOH. conda not in path?"; exit 1; fi

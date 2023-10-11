@@ -190,7 +190,8 @@ class BaseTrainer:
         return KLD
 
     @staticmethod
-    def save_checkpoint(state, folder='./', filename='model_best.pth.tar'):
+    def save_checkpoint(state, folder='./', filename='model_best.pth'):
+        # Note: originally .pth.tar ?
         if not os.path.isdir(folder):
             os.mkdir(folder)
         print('Saving best model: epoch {}'.format(state['epoch']))
