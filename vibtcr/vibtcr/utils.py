@@ -73,7 +73,7 @@ blosum50_20aa = {
 }
 
 
-def encode_aa_seqs(aa_seqs, blosum, max_seq_len):
+def encode_aa_seqs_orig(aa_seqs, blosum, max_seq_len):
     '''
     blosum encoding of a list of amino acid sequences with padding
     to a max length
@@ -90,11 +90,9 @@ def encode_aa_seqs(aa_seqs, blosum, max_seq_len):
     sequences = []
     for seq in aa_seqs:
         e_seq = np.zeros((len(seq), len(blosum["A"])))
-        count = 0
-        for aa in seq:
+        for count, aa in enumerate(seq):
             if aa in blosum:
                 e_seq[count] = blosum[aa]
-                count += 1
             else:
                 sys.stderr.write("Unknown amino acid in peptides: " + aa + ", encoding aborted!\n")
                 sys.exit(2)
@@ -112,6 +110,40 @@ def encode_aa_seqs(aa_seqs, blosum, max_seq_len):
 
     return enc_aa_seq
 
+# perhaps 9-10% faster to merge the loops
+def encode_aa_seqs(aa_seqs, blosum, max_seq_len):
+    '''
+    blosum encoding of a list of amino acid sequences with padding
+    to a max length.
+
+    parameters:
+        - aa_seqs : list with AA sequences
+        - blosum : dictionnary: key= AA, value= blosum encoding
+        - max_seq_len: common length for padding
+    returns:
+        - enc_aa_seq : list of np.ndarrays containing padded, encoded amino acid sequences
+
+    Blosum features usually represent evolutionary closeness of proteins and
+    are used for sequence alignment.  They can be viewed as amino acid
+    substituion probabilities for a cluster of "aligned" proteins [over
+    evolutionary time].  This is NOT a feature encoding based on amino acid
+    chemical properties, but more like a "natural closeness" feature space.
+
+    '''
+
+    # encode sequences:
+    n_features = len(blosum['A'])
+    n_seqs = len(aa_seqs)
+    enc_aa_seq = np.zeros((n_seqs, max_seq_len, n_features))
+    for i, seq in enumerate(aa_seqs):
+        for count, aa in enumerate(seq):
+            if aa in blosum:
+                enc_aa_seq[i, count, :] = blosum[aa]
+            else:
+                sys.stderr.write("Unknown amino acid in peptides: " + aa + ", encoding aborted!\n")
+                sys.exit(2)
+
+    return enc_aa_seq
 
 def get_max_aa_seq_len(df: pd.DataFrame, cols: List[str]) -> int:
     """ Given a list of column names, get the global maximum
