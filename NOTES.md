@@ -80,3 +80,12 @@ end of JSON-format `baseline-FOO.ipynb`.
 Restart jupyter-lab  
 edit ([un]comment) and try `runall.sh` again.
 
+**Now multiple attempts fixing errors** creating log files runall[1..5].sh
+were run until notebook pre-dependencies (in 'results/') were "complete".
+
+- Some additional output in *results/* were required, modifying avib.py to run
+them (and then rerun various dependent *baseline*-FOO notebooks).
+- **typo:** avib.cross.ipynb (not avib-cross) typo: needed rerun to create
+results/ for `baseline.cross.ipynb`
+
+
