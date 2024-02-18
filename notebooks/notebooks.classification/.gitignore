@@ -1,3 +1,4 @@
 results
 figures
 *.log
+avib.cross.py avib.py avib.splits-comparison.py baseline.alpha+beta-only.py baseline.beta-only.py baseline.cross.py baseline.full.py beta-dkl-comparison.py class-distribution.py dataset-creation.py length.py missing-modalities.py
