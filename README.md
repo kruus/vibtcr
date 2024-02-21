@@ -7,12 +7,42 @@ Paper: ["Attentive Variational Information Bottleneck for TCR–peptide interact
 
 ![architecture](architecture.png?raw=true "AVIB architecture")
 
-### Install `vibtcr`
+## Install `vibtcr`
 ```
 cd vibtcr
 pip install .
 ```
 Remark: `vibtcr` requires a different version of PyTorch than `tcrmodels`. It's recommended to install them in different environments.
+
+#### OLD conda install for pytorch 1.10 (see NOTES.md for more details)
+- after a light edit of requirements.txt (NOTES.md), `mamba create -n vibtcr --file=requirements-orig.txt`
+- [opt] to run original notebooks:
+	- `conda activate vibtcr; mamba install jupyterlab conda-forge::nb_conda_kernels`ipywidgets`
+- but there is still some confusion about tensorflow requirements, and another install path is described too.
+- *original `vibtcr` env might be required if you intend to run the ERGO II and NetTCR2.0 external codes*
+
+#### UPSTREAM conda packages for tcrppo integration (back story, WIP)
+- However, dumbing down requirements.txt to be unversioned, I can activate a modern pytorch 2.0 env
+- as described in github `tcrppo-internal` (NECLA gitlab project under Kai Li's name, I think)
+- Now a `pip install .` for vibtcr installs NO additional packages (as env 'tcr6' already has them)
+- and a simple inference script `scripts/classification:$ python avib-infer0.py 2>&1 | tee avi0.log`
+- now runs with identical log output in env `tcr6` as the original env `vibtcr`.
+- the above test also runs faster (17 s now; 21 s before)
+
+- Note: this suggests that tensorflow might not be needed to run avib itself, as vibtcr simplifies
+  the conda requirements to just tensorboard (tensorboardx?), IIRC.
+
+- Anyhow, I moved the original `requirements.txt` --> `requirements-orig.txt` and for reference have
+  duplicated the `tcr6` install file here (copied Feb 2024 from tcrppo-internal)
+
+### UPSTREAM packages for tcrppo integration (pytorch 2.x)
+- follow copied instructions in `env-tcr6.md` using package file `env-tcr6.yml`
+- Add to this a `pip install -e .`
+    - at least until I integrate vibtcr into tcrppo-internal
+- Now `conda activate tcr6` and try out some scripts
+- **Caveat**: we might not be able to run the vibtcr external codes for ERGO II and NetTCR2.0
+              in the `tcr6` environment.
+- So only run *vanilla* vibtcr training/inference in env `tcr6`, please.
 
 # Content
 ```
@@ -36,6 +66,10 @@ vibtcr
 └───tcrmodels/ (Python package which wraps SOTA ML-based TCR models)
 │   
 └───vibtcr/ (Python package which implements MVIB and AVIB for TCR-peptide interaction prediction)
+│   
+└───scripts/           plain python ( NO jupyter notebook requirement )
+    |  classification/ train everything and test model load classification, WIP
+
 ```
 
 # tcrmodels

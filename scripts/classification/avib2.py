@@ -40,6 +40,19 @@
 #  I saw one gpu at 100% mem and 0% GPU usage ... job somehow "stuck"
 #  with no progress!
 
+# Next todo:
+#   Investigate if we can use `ray` to decorate the generic training functions.
+#   `ray` usage eventually might be as simple as adding a decorator, and
+#   running all the runs while giving each training task some
+#   gpu resources like `gpus=1`.   `ray` should then run one task per gpu
+#   with much less fuss than th concurrentt.futures stuff in this file.
+#   i.e. much less code clutter for such details.
+# Next todo:
+#   If all folds that need rerun are within one 'major' task, then they
+#   run sequentially.
+#   INSTEAD, run each fold as an individual task, so *folds* are parallelized.
+#   There is some additional argument passing trickery, so it's
+#   **low priority** for now.
 
 # These jobs are completely independent training tasks, so
 # just use python multiprocessing...
